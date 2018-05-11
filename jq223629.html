@@ -1,0 +1,132 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery无缝滚动轮播图-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+.container {
+	width:425px;
+	height:325px;
+	margin:0 auto;
+	border:1px solid #ddd;
+	position:relative;
+	overflow:hidden;
+}
+.container:hover .btn {
+	display:block;
+}
+img {
+	width:425px;
+	height:100%;
+	float:left;
+}
+.btn {
+	display:inline-block;
+	border:20px solid transparent;
+	position:absolute;
+	top:40%;
+	cursor:pointer;
+	opacity:.5;
+	display:none;
+}
+.btn:hover {
+	opacity:1;
+}
+#prev {
+	border-right:20px solid pink;
+}
+#next {
+	border-left:20px solid pink;
+	right:0;
+}
+.imgCon {
+	position:absolute;
+	width:1700px;
+	height:100%;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="imgCon">
+    </div>
+    <a id="prev" class="btn"></a>
+    <a id="next" class="btn"></a>
+</div>
+
+<script>
+$(function() {
+    var arr = ['http://www.jq22.com/img/cs/500x300-1.png', 'http://www.jq22.com/img/cs/500x300-2.png', 'http://www.jq22.com/img/cs/500x300-3.png', 'http://www.jq22.com/img/cs/500x300-4.png'];
+    // 默认第一张
+    $.each(arr, function(i, m) {
+        var gg = document.createElement('img');
+        $(gg).attr('src', m);
+        $('.imgCon').append(gg);
+    });
+    $('.imgCon').css({
+        left: 0
+    })
+    var derection = true;
+
+    function time() {
+        if (derection) { //向左
+
+            $('.imgCon').stop().animate({
+                left: -425
+            }, function() {
+                $('.imgCon').css({
+                    left: 0
+                });
+                var i = arr.shift();
+                arr.push(i);
+                $('.imgCon').html('');
+                $.each(arr, function(i, m) {
+                    var img = document.createElement('img');
+                    $(img).attr('src', m);
+                    $('.imgCon').append(img);
+                });
+            })
+        } else {
+
+            $('.imgCon').css({
+                left: -425
+            });
+            var i = arr.pop();
+            arr.unshift(i);
+            $('.imgCon').html('');
+            $.each(arr, function(i, m) {
+                var img = document.createElement('img');
+                $(img).attr('src', m);
+                $('.imgCon').append(img);
+            });
+            $('.imgCon').stop().animate({
+                left: 0
+            }, function() {
+
+            })
+        }
+
+    }
+
+    var timer = setInterval(time, 3000);
+    $('.container').mouseover(function() {
+        clearInterval(timer);
+    });
+    $('.container').mouseleave(function() {
+        timer = setInterval(time, 3000);
+        derection = true;
+    });
+    $('#next').click(function() {
+        derection = true;
+        time();
+    });
+    $('#prev').click(function() {
+        derection = false;
+        time();
+    });
+})
+</script>
+
+</body>
+</html>
